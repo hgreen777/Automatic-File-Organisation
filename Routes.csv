@@ -3,4 +3,5 @@ CD, "", // Code
 WK, "", // Work
 GM, "", // Games
 PO, "", // Life/Photos
-// Overflow
+IM, "", // Important Info need to remember (ie recovery codes etc) 
+XX, "", // Overflow

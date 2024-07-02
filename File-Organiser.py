@@ -29,6 +29,8 @@ def detectChange(path):
     # Clean list
     if "Overflow" in allFiles:
         allFiles.remove("Overflow")
+    if "Games" in allFiles:
+        allFiles.remove("Games")
     
     return allFiles
 

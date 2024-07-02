@@ -40,8 +40,6 @@ def moveFile(file, newPath):
 
     shutil.move(oldPath, newPath)
 
-# TODO : Create Dictionary based of available routes
-
 # TODO : Route the file to correct destination (call moveFile based of code (search in dictionary for path)) (call clean file name if needed)
 # Obtains code abreviations from filename from file name
 def obtainCodes(fileName):
@@ -64,7 +62,20 @@ def obtainCodes(fileName):
     return codes
 
 # Find destination based off codes (return destination (call clean name if needed))
+def findDestination(codes, routes, filename):
+    # Loop over codes and check if in destination
 
+    # Base Case
+    for route in routes:
+        if route['code'] == "XX":
+            destination = route['path']
+    
+
+    if "rm" in codes:
+        filename = cleanName(filename)
+        return destination, filename, True
+    
+    return destination,filename, False
 
 # Clean File Name
 def cleanName(fileName):
@@ -89,8 +100,13 @@ def cleanName(fileName):
 # TODO : Creating Graphic
      
 
+def main():
+    readCSV()               # Create Dictionary
+    testStr = "test_.file._CD-FD-rm.txt"
+    codes = obtainCodes(testStr)    # Obtain the codes from the given file
+    #TODO Change returns name
+    returns = findDestination(codes, routes, testStr)
+    print(returns[0])
+    print(returns[1])
 
-testStr = "test_.file._CD-FD-rm.txt"
-print(routes)
-readCSV()
-print(routes)
+main()

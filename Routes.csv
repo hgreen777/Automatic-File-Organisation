@@ -1,7 +1,9 @@
-SC, "", // School
-CD, "", // Code
-WK, "", // Work
-GM, "", // Games
-PO, "", // Life/Photos
-IM, "", // Important Info need to remember (ie recovery codes etc) 
-XX, "", // Overflow
+code, path, desc
+SC, "",// School
+CD, "",// Code
+WK, "",// Work
+GM, "",// Games
+PO, "",// Life/Photos
+IM, "",// Important Info need to remember (ie recovery codes etc) 
+XX, "",// Overflow
+rm, "",// Clean name

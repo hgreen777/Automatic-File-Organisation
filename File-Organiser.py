@@ -51,7 +51,19 @@ def obtainCodes(fileName):
 
 
 
-# TODO : Clean File Name 
+# Clean File Name
+def cleanName(fileName):
+    mask = r"(_[^_]+)(?=\.[^.]*$)"
+
+    match = re.search(mask, fileName)
+
+    if match:
+        fileName = fileName.replace(match[0], "")
+        return fileName
+    
+    return fileName
+
+
 
 # TODO : Creating new locations from CLI input
 
@@ -63,6 +75,6 @@ def obtainCodes(fileName):
      
 
 
-testStr = "test .File._CD-FD-rm.txt"
+testStr = "test_.file._CD-FD-rm.txt"
 print(obtainCodes(testStr))
-
+print(cleanName(testStr))

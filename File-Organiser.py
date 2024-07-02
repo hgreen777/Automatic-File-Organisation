@@ -122,7 +122,7 @@ def cleanName(fileName):
 # TODO : ensure that does not break if destination does not exist or file name problem etc.
 # TODO : Documentation
 
-# TODO : Testing main implementation ^^
+# TODO : Testing main implementation ^^ (Test each individual section with the proper routes and actual test data seperately before it is all done at once)
 # TODO : Put it all togethor & Documentation & some improvements
 
 def main():

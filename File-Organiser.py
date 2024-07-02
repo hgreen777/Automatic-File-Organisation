@@ -75,7 +75,7 @@ def findDestination(codes, routes, filename):
             destination = route['path']
 
             # Check for further extentions
-            # TODO : Make more efficient (seperate CSV)
+            # TODO : Make more efficient (seperate CSV) - this will ensure it is a valid extension?
             for index, code in enumerate(codes):
                 if index == 0 or code == "rm":
                     continue
@@ -115,8 +115,10 @@ def cleanName(fileName):
 # TODO : Automatic Running
 
 # TODO : Creating Graphic
+
      
 # TODO : Put all functions togethor for actual inplementation, & testing, renaming files and moving files need to be tested, update startPATH, remove testStr with acc things
+# TODO : ensure that does not break if destination does not exist or file name problem etc.
 # TODO : Documentation
 
 def main():

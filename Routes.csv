@@ -1,9 +1,10 @@
-code,path,desc
-SC,"",// School
-CD,"",// Code
-WK,"",// Work
-GM,"",// Games
-PO,"",// Life/Photos
-IM,"",// Important Info need to remember (ie recovery codes etc) 
-XX,"This is path, path is life",// Overflow
-rm,"",// Clean name
+code,path,desc,type
+XX,"This is path, path is life",// Overflow - (first for processing),base
+SC,"/School",// School,base
+PY,"/Extenstion",//Physics,exstention
+CD,"/Code",// Code,base
+WK,"/Work",// Work,base
+GM,"/Games",// Games,base
+PO,"/Life",// Life/Photos,base
+IM,"/Info",// Important Info need to remember (ie recovery codes etc),base
+rm,"",// Clean name (jus here so shows in graphic - is a code but not route),base

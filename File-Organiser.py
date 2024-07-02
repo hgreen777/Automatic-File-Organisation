@@ -122,20 +122,8 @@ def cleanName(fileName):
 # TODO : ensure that does not break if destination does not exist or file name problem etc.
 # TODO : Documentation
 
-def testmain():
-
-    readCSV()               # Create Dictionary
-    testStr = "test_.file._SC-PH-rm.txt"
-    codes = obtainCodes(testStr)    # Obtain the codes from the given file
-    #TODO Change returns name
-    returns = findDestination(codes, routes, testStr)
-
-    #So code dont run
-    if False:
-    #if returns[2] == True:
-        os.rename((startPATH + "/" + testStr),)
-    print(returns[0])
-    print(returns[1])
+# TODO : Testing main implementation ^^
+# TODO : Put it all togethor & Documentation & some improvements
 
 def main():
 

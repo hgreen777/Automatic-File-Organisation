@@ -9,7 +9,7 @@ import csv      # CSV operations
 # Must swith \ to / or breaks
 # Original Path to check where for new files
 # Input directory for sorting files
-startPATH = r"H:\hjgre\Pictures\Saved Pictures"
+startPATH = r"H:\hjgre\Downloads2\DropSort"
 
 routes = []
 
@@ -23,7 +23,7 @@ def readCSV():
             routes.append(row)
 
 
-def dectectChange(path):
+def detectChange(path):
     allFiles = os.listdir(path) # Gets all files in the path in a list
 
     # Clean list
@@ -37,6 +37,8 @@ def moveFile(file, newPath):
     oldPath = startPATH + "/" + file
 
     shutil.move(oldPath, newPath)
+
+    return 
 
 # TODO : Route the file to correct destination (call moveFile based of code (search in dictionary for path)) (call clean file name if needed)
 # Obtains code abreviations from filename from file name
@@ -106,8 +108,6 @@ def cleanName(fileName):
     
     return fileName
 
-
-
 # TODO : Creating new locations from CLI input
 
 # TODO : Manually Run Command (from CLI)
@@ -115,13 +115,12 @@ def cleanName(fileName):
 # TODO : Automatic Running
 
 # TODO : Creating Graphic
-
      
-# TODO : Put all functions togethor for actual inplementation, & testing, renaming files and moving files need to be tested, update startPATH, remove testStr with acc things
+# TODO : Put all functions togethor for actual inplementation, & testing, renaming files and moving files need to be tested
 # TODO : ensure that does not break if destination does not exist or file name problem etc.
 # TODO : Documentation
 
-def main():
+def testmain():
 
     readCSV()               # Create Dictionary
     testStr = "test_.file._SC-PH-rm.txt"
@@ -136,4 +135,29 @@ def main():
     print(returns[0])
     print(returns[1])
 
-main()
+def main():
+
+    readCSV()
+
+    files = detectChange()
+
+    for file in files:
+        codes = obtainCodes(file)
+        returns = findDestination(codes, routes, file)
+        destination = returns[0]; filename = [1]; isNameChange = returns[2]
+
+        # Chnage Name, Move file to new location
+        moveFile(file,destination)
+        if isNameChange:
+            try:
+                os.rename((destination + "/" + file), (destination+ "/" + filename))
+            except:
+                print("File not named Correctly")
+                break
+
+    
+    print("Files moved Successfully ")
+
+
+
+

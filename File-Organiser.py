@@ -47,8 +47,11 @@ def moveFile(file, newPath):
 def obtainCodes(fileName):
     # Remove FileType 
     mask = r"^(.*)(?=\.[^.]*$)"
-    fileName = re.findall(mask, fileName)
-    fileName = fileName[0] # Select first item in list (findall returns list)
+    regex_name = re.findall(mask, fileName)
+    # If it is a directory will not have a file type so nothing will be picked up in mask.
+    if len(regex_name) != 0:
+        fileName = regex_name[0]
+
 
     # Obtain Code
     mask = r"\_[^_]*$"
@@ -129,7 +132,7 @@ def main():
 
     readCSV()
 
-    files = detectChange()
+    files = detectChange(startPATH)
 
     for file in files:
         codes = obtainCodes(file)
@@ -149,5 +152,17 @@ def main():
     print("Files moved Successfully ")
 
 
+readCSV()
+files = detectChange(startPATH)
+print(files)
+
+
+for file in files:
+    codes = obtainCodes(file)
+    print(codes)
+    returns = findDestination(codes, routes, file)
+    destination = returns[0]; filename = [1]; isNameChange = returns[2]
+
+    print(returns)
 
 

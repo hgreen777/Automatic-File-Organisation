@@ -22,7 +22,6 @@ def readCSV():
         for row in reader:
             routes.append(row)
 
-
 def detectChange(path):
     allFiles = os.listdir(path) # Gets all files in the path in a list
 
@@ -34,7 +33,7 @@ def detectChange(path):
     
     return allFiles
 
-# TODO : Test
+
 def moveFile(file, newPath):
     oldPath = startPATH + "/" + file
     newPath = newPath + "/" + file
@@ -43,7 +42,7 @@ def moveFile(file, newPath):
 
     return 
 
-# TODO : Route the file to correct destination (call moveFile based of code (search in dictionary for path)) (call clean file name if needed)
+# Route the file to correct destination (call moveFile based of code (search in dictionary for path)) (call clean file name if needed)
 # Obtains code abreviations from filename from file name
 def obtainCodes(fileName):
     # Remove FileType 
@@ -132,8 +131,6 @@ def cleanName(fileName):
 
 # TODO : Creating Graphic
      
-# TODO : Put all functions togethor for actual inplementation, & testing, renaming files and moving files need to be tested
-# TODO : ensure that does not break if destination does not exist or file name problem etc.
 # TODO : Documentation
 
 # TODO : Testing main implementation ^^ (Test each individual section with the proper routes and actual test data seperately before it is all done at once)

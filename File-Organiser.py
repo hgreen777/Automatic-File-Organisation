@@ -6,7 +6,7 @@ import csv      # CSV operations
 import threading
 import time
 
-# TODO : (Potential use binary tree to make searching for routes more efficient)
+# TODO : (Potential use binary tree to make searching for routes more efficient), External extentions file
 
 # Must swith \ to / or breaks
 # Original Path to check where for new files
@@ -127,11 +127,11 @@ def cleanName(fileName):
 
 # TODO : Creating new locations from CLI input
 
-# TODO : Manually Run Command (from CLI) / 
+# TODO : Manually Run Command (from CLI) - Test
 
-# TODO : Automatic Running / 
+# TODO : Automatic Running - Test
      
-# TODO : Documentation
+# TODO : Documentation + Comments
 
 # Runs the process
 def main():
@@ -165,14 +165,15 @@ def automaticRun():
         main()
         time.sleep(600) # Wait 10mins
 
+auto = threading.Thread(target=automaticRun)
+
 def startAutomatic():
     global stop_thread, auto
     stop_thread = False
-    auto = threading.Thread(target=automaticRun)
     auto.start()
 
 def stopAutomatic():
-    global stop_thread
+    global stop_thread, auto
     stop_thread = True
     auto.join()
 
@@ -181,15 +182,23 @@ def userInput():
     startupInput = input("Auto-File-Organizer : Command: (h for help): ") 
 
     if startupInput == "h":
-        print("Commands: h = help menu giving available commands \n a = start automatic processing \n m = begin a manual process (stops automatic) \n c = create new route/extension \n q = quit automatic")
+        print("""Commands: h = help menu giving available commands
+          a = start automatic processing
+          m = begin a manual process (stops automatic)
+          c = create new route/extension
+          q = quit automatic""")
+        
     elif startupInput == "a":
         startAutomatic()
     elif startupInput == "m":
         main()
-        stopAutomatic()
+        if auto.is_alive():
+            stopAutomatic()
     elif startupInput == "q":
-        stopAutomatic()
-        print("Quitting automatic process.")
+        if auto.is_alive():
+            stopAutomatic()
+            print("Quitting automatic process.")
+        print("Quitting Application")
         return
     
     userInput()

@@ -133,9 +133,6 @@ def cleanName(fileName):
      
 # TODO : Documentation
 
-# TODO : Testing main implementation ^^ (Test each individual section with the proper routes and actual test data seperately before it is all done at once)
-# TODO : Put it all togethor & Documentation & some improvements
-
 def main():
 
     readCSV()
@@ -145,22 +142,19 @@ def main():
     for file in files:
         codes = obtainCodes(file)
         returns = findDestination(codes, routes, file)
-        destination = returns[0]; filename = [1]; isNameChange = returns[2]
+        destination = returns[0]; filename = returns[1]; isNameChange = returns[2]
 
         # Chnage Name, Move file to new location
         moveFile(file,destination)
+
         if isNameChange:
             try:
                 os.rename((destination + "/" + file), (destination+ "/" + filename))
-            except:
-                print("File not named Correctly")
-                break
+            except Exception as e:
+                print(f"File name has not been cleaned but may still have been relocated: Error Msg: {e}")
 
     
     print("Files moved Successfully ")
-
-
-testFile = "c-programming-a-modern-approach-2nbsped-0393979504-9780393979503_compress (1)_CD.pdf"
 
 main()
 

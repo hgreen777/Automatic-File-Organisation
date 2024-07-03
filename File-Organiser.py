@@ -37,6 +37,7 @@ def detectChange(path):
 # TODO : Test
 def moveFile(file, newPath):
     oldPath = startPATH + "/" + file
+    newPath = newPath + "/" + file
 
     shutil.move(oldPath, newPath)
 
@@ -151,28 +152,19 @@ def main():
 
         # Chnage Name, Move file to new location
         moveFile(file,destination)
-        if isNameChange:
-            try:
-                os.rename((destination + "/" + file), (destination+ "/" + filename))
-            except:
-                print("File not named Correctly")
-                break
+        #if isNameChange:
+        #    try:
+        #        os.rename((destination + "/" + file), (destination+ "/" + filename))
+        #    except:
+        #        print("File not named Correctly")
+        #        break
 
     
     print("Files moved Successfully ")
 
 
-readCSV()
-files = detectChange(startPATH)
-print(files)
+testFile = "c-programming-a-modern-approach-2nbsped-0393979504-9780393979503_compress (1)_CD.pdf"
 
-
-for file in files:
-    codes = obtainCodes(file)
-    print(codes)
-    returns = findDestination(codes, routes, file)
-    destination = returns[0]; filename = [1]; isNameChange = returns[2]
-
-    print(returns)
+main()
 
 

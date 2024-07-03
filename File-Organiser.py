@@ -152,12 +152,12 @@ def main():
 
         # Chnage Name, Move file to new location
         moveFile(file,destination)
-        #if isNameChange:
-        #    try:
-        #        os.rename((destination + "/" + file), (destination+ "/" + filename))
-        #    except:
-        #        print("File not named Correctly")
-        #        break
+        if isNameChange:
+            try:
+                os.rename((destination + "/" + file), (destination+ "/" + filename))
+            except:
+                print("File not named Correctly")
+                break
 
     
     print("Files moved Successfully ")

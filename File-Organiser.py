@@ -3,6 +3,8 @@ import os       # OS (checking directories)
 import shutil   # File Operation
 import re       # Regex
 import csv      # CSV operations 
+import threading
+import time
 
 # TODO : (Potential use binary tree to make searching for routes more efficient)
 
@@ -125,14 +127,13 @@ def cleanName(fileName):
 
 # TODO : Creating new locations from CLI input
 
-# TODO : Manually Run Command (from CLI)
+# TODO : Manually Run Command (from CLI) / 
 
-# TODO : Automatic Running
-
-# TODO : Creating Graphic
+# TODO : Automatic Running / 
      
 # TODO : Documentation
 
+# Runs the process
 def main():
 
     readCSV()
@@ -156,6 +157,51 @@ def main():
     
     print("Files moved Successfully ")
 
-main()
+stop_thread = False
+
+def automaticRun():
+    global stop_thread
+    while not stop_thread:
+        main()
+        time.sleep(600) # Wait 10mins
+
+def startAutomatic():
+    global stop_thread, auto
+    stop_thread = False
+    auto = threading.Thread(target=automaticRun)
+    auto.start()
+
+def stopAutomatic():
+    global stop_thread
+    stop_thread = True
+    auto.join()
+
+
+def userInput():
+    startupInput = input("Auto-File-Organizer : Command: (h for help): ") 
+
+    if startupInput == "h":
+        print("Commands: h = help menu giving available commands \n a = start automatic processing \n m = begin a manual process (stops automatic) \n c = create new route/extension \n q = quit automatic")
+    elif startupInput == "a":
+        startAutomatic()
+    elif startupInput == "m":
+        main()
+        stopAutomatic()
+    elif startupInput == "q":
+        stopAutomatic()
+        print("Quitting automatic process.")
+        return
+    
+    userInput()
+
+
+
+userInput()
+
+
+
+
+
+
 
 

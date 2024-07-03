@@ -111,6 +111,16 @@ def cleanName(fileName):
         fileName = fileName.replace(match[0], "")
         return fileName
     
+    # For handling directorys
+    mask = r"^(.*)(?=\.[^.]*$)"
+    regex_name = re.findall(mask, fileName)
+    # If it is a directory will not have a file type so nothing will be picked up in mask.
+    if len(regex_name) == 0:
+        mask = r"(_[^_]+)$"
+        reg = re.findall(mask, fileName)
+        fileName = fileName.replace(reg[0], "")
+        return fileName
+    
     return fileName
 
 # TODO : Creating new locations from CLI input

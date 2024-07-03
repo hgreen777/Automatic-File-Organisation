@@ -1,7 +1,7 @@
 code,path,desc,type
 XX,"H:\hjgre\Downloads2\DropSort\Overflow",// Overflow - (first for processing),base
 SC,"H:\hjgre\School",// School,base
-PY,"\A-Level\Physics",//Physics,extention
+Phy,"\A-Level\Physics",//Physics,extention
 CS,"\A-Level\CS",//CS,extention
 CD,"E:\Programming",// Code,base
 WK,"E:\WorkDocs",// Work,base

@@ -1,5 +1,7 @@
 # Automatic-File-Organisation
-Automatically organises and sorts files placed in a directory and routes across to specific destination on drive depending on code.
+Automatically organises and sorts files placed in a directory and routes across to specific destination on drive depending on code. Allows for routing codes to be removed to ensure filenames are kept 'clean' and understandable.
+
+# Setting up & Using:
 
 Before Using:
 
@@ -31,10 +33,7 @@ BEWARE: Program has not been stress tested & is not secure so errors likely to o
 
 Note: System uses threading and batch operation interval: For automatic: 10mins, For manual: up to user.
 
-
-<br>
-
-# Future:
+# 🔮 Future:
 
 *Have startPATH blank on main branch & routes empty except XX, rm, and an example
 

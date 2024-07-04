@@ -131,7 +131,7 @@ def cleanName(fileName):
 
 # TODO : Automatic Running - Test
      
-# TODO : Documentation + Comments
+# TODO : Documentation // + Comments
 
 # Runs the process
 def main():

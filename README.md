@@ -2,6 +2,7 @@
 Automatically organises and sorts files placed in a directory and routes across to specific destination on drive depending on code.
 
 Before Using:
+
     - If you want the program to run on start download to a memorable place, and then run on start through windows
     - Update 'startPATH' with the PATH of the folder/directory that will be checked for changes and will be checked for files to be sorted (suggested: change it to desktop)
     - Update Routes.csv with all your desired routes, this can be done manually or through CLI
@@ -11,6 +12,7 @@ Before Using:
         - NOTE: Codes can be uppercase or lowercase and can be any length. 2/3 uppercase letters are suggested for efficiency.
 
 How to use:
+
     - On start use the command 'h' to show all the available commands.
     - Use 'c' to create new route (follow the steps provided).
     - Choose your operation mode either 'a' (Automatic) or 'm' (Manual)

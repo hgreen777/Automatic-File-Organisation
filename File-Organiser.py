@@ -193,7 +193,7 @@ def automaticRun():
 # Creating a new thread that will run the automatic processing. 
 auto = threading.Thread(target=automaticRun)
 
-#
+# TODO : Comment fropm here
 def startAutomatic():
     global stop_thread, auto
     stop_thread = False

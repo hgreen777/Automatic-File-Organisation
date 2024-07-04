@@ -12,7 +12,7 @@ import time         # Time
 
 # TODO : Creating new locations from CLI input - Test
 
-# TODO : Manually Run Command (from CLI) - Test
+# TODO : Manually Run Command (from CLI) - Test - test that a user cannot try starting automatic processing twice
 
 # TODO : Automatic Running - Test
 
@@ -193,40 +193,43 @@ def automaticRun():
 # Creating a new thread that will run the automatic processing. 
 auto = threading.Thread(target=automaticRun)
 
-# TODO : Comment fropm here
+# Starts the automatic process on a seperate thread
 def startAutomatic():
     global stop_thread, auto
-    stop_thread = False
-    auto.start()
+    stop_thread = False     # Ensure processing does not stop instantly.
+    auto.start()            # Start the processing on the seperate thread.
 
+# Stops the automatic process 
 def stopAutomatic():
     global stop_thread, auto
-    stop_thread = True
-    auto.join()
-
+    stop_thread = True      # This will stop the automatic processing loop.
+    auto.join()             # Syncs the program/thread (thread merges & joins main program when finishes)
 
 def userInput():
+    # Gain the user's command.
     startupInput = input("Auto-File-Organizer : Command: (h for help): ") 
 
-    if startupInput == "h":
+    if startupInput == "h":   # Output Commands to user to assist with all available commands. 
         print("""Commands: h = help menu giving available commands
-          a = start automatic processing
-          m = begin a manual process (stops automatic)
-          c = create new route/extension
-          q = quit automatic""")
-        
-    elif startupInput == "a":
+          a = start automatic processing.
+          s = stops automatic processing.
+          m = begin a manual process (stops automatic).
+          c = create new route/extension.
+          q = quit program.""")
+    elif startupInput == "a": # Starts automatic processing.
         startAutomatic()
-    elif startupInput == "m":
+    elif startupInput == "m": # Switches to manual processing (and does a manual run).
         main()
         if auto.is_alive():
             stopAutomatic()
-    elif startupInput == "c":
+    elif startupInput == "c": # Creates a new route for the program
+        # Gains necessary input to create a new path.
         code = input("What is the code for the new route? ")
         desc = input("Give a short description for the path: ")
         path = input("What is the full path to the destination directory for the route?")
         type = input("What is the type of the route (base or extention)? ")
 
+        # TODO : Comment from here
         if type == "base":
             # Check directory
             if os.path.exists(path) == False:
@@ -253,6 +256,8 @@ def userInput():
         print("Quitting Application")
         return
     
+    # If a process has started give the user the option to give another command (ie stop the processing)
     userInput()
 
+# Upon Starting program start by prompting user on what processsing mode they want to use.
 userInput()

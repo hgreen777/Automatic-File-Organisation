@@ -125,7 +125,7 @@ def cleanName(fileName):
     
     return fileName
 
-# TODO : Creating new locations from CLI input
+# TODO : Creating new locations from CLI input - Test
 
 # TODO : Manually Run Command (from CLI) - Test
 
@@ -194,6 +194,31 @@ def userInput():
         main()
         if auto.is_alive():
             stopAutomatic()
+    elif startupInput == "c":
+        code = input("What is the code for the new route? ")
+        desc = input("Give a short description for the path: ")
+        path = input("What is the full path to the destination directory for the route?")
+        type = input("What is the type of the route (base or extention)? ")
+
+        if type == "base":
+            # Check directory
+            if os.path.exists(path) == False:
+                print("Not a valid PATH")
+                userInput()
+        if type == "extention":
+            base = input("Give the path of the base directory for the extention: ")
+            if os.path.exists(base) == False:
+                print("Not a valid PATH")
+                userInput()
+            else:
+                path = path.replace(base, "")
+
+        with open('./Routes.csv', mode='a', newline='') as file:
+            writer = csv.writer(file)
+            # Write a row with the route information
+            writer.writerow([code, desc, path, type])
+
+        
     elif startupInput == "q":
         if auto.is_alive():
             stopAutomatic()

@@ -13,6 +13,9 @@ Before Using:
         - 'XX' stores the overflow directory location (ie if a file cannot be sorted anywhere else due to an incorrect code etc, it will be moved it for manual sorting by user.)
         - NOTE: Codes can be uppercase or lowercase and can be any length. 2/3 uppercase letters are suggested for efficiency.
 
+    - ADVANCED:
+        - Can change the interval at which the automatic processing runs (in seconds, set to 600 (10mins))
+
 How to use:
 
     - On start use the command 'h' to show all the available commands.
@@ -22,16 +25,17 @@ How to use:
         - Manual is better if you dont want the program to be constantly processing or if you want to force the next processing before the automatic (this will stop the automatic processing)
     - Put a file or folder into your chosen startPATH location (ie desktop), then upon a manual processing or automatic processing, the file will be routed to the location & name will be changed if 'rm' used.
     - When saving a file to the location or moving it, rename it to include the code, codes should come at the end of a file/folder name (but before file-type if relevant).
+        - Don't use full-stops in filenames (used to find the filetype)
         - Code should start with '_' 
-        - The first code should be either base code (base path)
+        - The FIRST CODE SHOULD BE BASE CODE (base path)
         - Codes should be seperated with '-'
         - EG FILENAME_base-extention-extention-rm.txt
         - or FILENAME_base-rm.txt 
         - ^^ both valid options
 
-BEWARE: Program has not been stress tested & is not secure so errors likely to occur if program not used properly. Ensure correct usage
+BEWARE: Program has not been stress tested & is not secure so errors likely to occur if program not used properly. Ensure correct usage.
 
-Note: System uses threading and batch operation interval: For automatic: 10mins, For manual: up to user.
+Note: System uses threading and batch operation interval: For automatic: 10mins (original), For manual: up to user.
 
 # 🔮 Future:
 
@@ -42,4 +46,4 @@ Future Features:
     - Automatically starts automatic processing if user does not respond.
     - More efficient route searching.
     - Protecting code to prevent crashing or errors.
-    - 
+    - Allow user to use full-stops in filename

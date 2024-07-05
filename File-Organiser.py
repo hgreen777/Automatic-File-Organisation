@@ -217,19 +217,26 @@ def userInput():
           m = begin a manual process (stops automatic).
           c = create new route/extension.
           q = quit program.""")
+        userInput()
+        return
     elif startupInput == "a": # Starts automatic processing.
         startAutomatic()
+        userInput()
+        return
     elif startupInput == "m": # Switches to manual processing (and does a manual run).
         main()
         if auto.is_alive():
             stopAutomatic()
+        userInput()
+        return
     elif startupInput == "s": # Stops the automatic process (without quitting program)
         if auto.is_alive():
             stopAutomatic()
             print("Automatic Process has been stopped")
-            userInput()
         else:
             print("Process is not running")
+        userInput()
+        return
     elif startupInput == "c": # Creates a new route for the program
         # Gains necessary input to create a new path.
         code = input("What is the code for the new route? ")
@@ -242,12 +249,14 @@ def userInput():
             if os.path.exists(path) == False:
                 print("Not a valid PATH")
                 userInput()
+                return
         if type == "extention":
             base = input("Give the full path of the extention directory for the extention: ")
             # Check the extention path is valid.
             if os.path.exists(base) == False:
                 print("Not a valid PATH")
                 userInput()                 # If not valid just restart input process.
+                return
             else:
                 path = path.replace(base, "")   # Create a valid extention path.
 
@@ -255,6 +264,9 @@ def userInput():
         with open('./Routes.csv', mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([code, desc, path, type])
+        
+        userInput()
+        return
     elif startupInput == "q": # Quit Application
 
         # If the automatic process thread is going, then stop it and quit application.

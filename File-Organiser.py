@@ -24,7 +24,7 @@ automaticInterval = 600
 # Stores all routes in a list of dictionaries. to be searched when creating final destination path for a file.
 routes = []
 
-# Create Dictionary of available routes
+# Create Dictionary of available routes.
 def readCSV():
     # Read all the codes into a dictionary.
     with open("./Routes.csv", mode='r') as file:
@@ -60,7 +60,7 @@ def moveFile(file, newPath):
     return 
 
 # Route the file to correct destination - finds all the codes then finds the path based of the codes.
-# Obtains code abreviations from filename
+# Obtains code abreviations from filename.
 def obtainCodes(fileName):
     # Remove FileType - mask finds the final full stop and looks ahead to the end of the string.
     mask = r"^(.*)(?=\.[^.]*$)"
@@ -122,7 +122,7 @@ def findDestination(codes, routes, filename):
     # Returns: destination PATH, filename the file should be saved as & if cleanName has been used
     return destination,filename, False
 
-# Cleans File Name
+# Cleans File Name.
 def cleanName(fileName):
     # Locates the codes between final '_' and the file type 
     mask = r"(_[^_]+)(?=\.[^.]*$)"
@@ -149,7 +149,7 @@ def cleanName(fileName):
     # If provblem occured and nothing is changed than just return the original filename. 
     return fileName
 
-# Runs the full process of finding files to sort, sorting them & renaming them
+# Runs the full process of finding files to sort, sorting them & renaming them.
 def main():
     # Make sure using most-up-to-date routes (ie re-read)
     readCSV()
@@ -181,7 +181,7 @@ def main():
 # Used to stop automatic processing and allow the program to sync.
 stop_thread = False
 
-# Used to start the process running automatically every interval (original 10mins)
+# Used to start the process running automatically every interval (original 10mins).
 def automaticRun():
     global stop_thread      # Ensure edits global scope.
     # While the process has not been stopped by user (will be running in a seperate thread)
@@ -193,18 +193,19 @@ def automaticRun():
 # Creating a new thread that will run the automatic processing. 
 auto = threading.Thread(target=automaticRun)
 
-# Starts the automatic process on a seperate thread
+# Starts the automatic process on a seperate thread.
 def startAutomatic():
     global stop_thread, auto
     stop_thread = False     # Ensure processing does not stop instantly.
     auto.start()            # Start the processing on the seperate thread.
 
-# Stops the automatic process 
+# Stops the automatic process.
 def stopAutomatic():
     global stop_thread, auto
     stop_thread = True      # This will stop the automatic processing loop.
     auto.join()             # Syncs the program/thread (thread merges & joins main program when finishes)
 
+# Get command for user for next step.
 def userInput():
     # Gain the user's command.
     startupInput = input("Auto-File-Organizer : Command: (h for help): ") 
@@ -222,6 +223,13 @@ def userInput():
         main()
         if auto.is_alive():
             stopAutomatic()
+    elif startupInput == "s": # Stops the automatic process (without quitting program)
+        if auto.is_alive():
+            stopAutomatic()
+            print("Automatic Process has been stopped")
+            userInput()
+        else:
+            print("Process is not running")
     elif startupInput == "c": # Creates a new route for the program
         # Gains necessary input to create a new path.
         code = input("What is the code for the new route? ")
@@ -229,27 +237,27 @@ def userInput():
         path = input("What is the full path to the destination directory for the route?")
         type = input("What is the type of the route (base or extention)? ")
 
-        # TODO : Comment from here
         if type == "base":
-            # Check directory
+            # Check base directory is valid.
             if os.path.exists(path) == False:
                 print("Not a valid PATH")
                 userInput()
         if type == "extention":
-            base = input("Give the path of the base directory for the extention: ")
+            base = input("Give the full path of the extention directory for the extention: ")
+            # Check the extention path is valid.
             if os.path.exists(base) == False:
                 print("Not a valid PATH")
-                userInput()
+                userInput()                 # If not valid just restart input process.
             else:
-                path = path.replace(base, "")
+                path = path.replace(base, "")   # Create a valid extention path.
 
+        # Write the new Route to the csv.
         with open('./Routes.csv', mode='a', newline='') as file:
             writer = csv.writer(file)
-            # Write a row with the route information
             writer.writerow([code, desc, path, type])
+    elif startupInput == "q": # Quit Application
 
-        
-    elif startupInput == "q":
+        # If the automatic process thread is going, then stop it and quit application.
         if auto.is_alive():
             stopAutomatic()
             print("Quitting automatic process.")

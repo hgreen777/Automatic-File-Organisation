@@ -8,11 +8,7 @@ import time         # Time
 
 # TODO : (Potential use binary tree to make searching for routes more efficient - cant guarentee balanced - personal use is balanced due to me maintaining?), External extentions file - ~Line: 100
 
-# TODO : Creating new locations from CLI input - Test
-
-# TODO : Manually Run Command (from CLI) - Test - test that a user cannot try starting automatic processing twice
-
-# TODO : Automatic Beta Test with real data
+# TODO : Automatic Beta Test with real data - Real Application (with auto launch, and actual data)
 
 
 # Original Path to check where for new files
@@ -45,7 +41,6 @@ def detectChange(path):
         allFiles.remove("Games")
     
     return allFiles
-
 
 # Handles the actual moving of the file from one location to another.
 def moveFile(file, newPath):
@@ -229,8 +224,11 @@ def userInput():
             q = quit program.""")
 
         elif startupInput == "a": # Starts automatic processing.
-            print("Type 's' to stop.")
-            startAutomatic()
+            if not auto.is_alive():
+                print("Type 's' to stop.")
+                startAutomatic()
+            else:
+                print("Already Running")
 
         elif startupInput == "m": # Switches to manual processing (and does a manual run).
             main()
@@ -252,14 +250,30 @@ def userInput():
             path = input("What is the full path to the destination directory for the route?")
             type = input("What is the type of the route (base or extention)? ")
 
+            if code == "" or path == "" or type =="":
+                print("Missing Necessary Data")
+                continue
+
+            # Check if code is a copy
+            dup = False
+            readCSV()
+
+            for route in routes:
+                if route['code'] == code:
+                    print("Duplicate Code")
+                    dup = True
+                    break
+            
+            if dup:
+                continue
+
             if type == "base":
                 # Check base directory is valid.
                 if not os.path.exists(path):
                     print("Not a valid PATH")
                     continue
-
-            if type == "extention":
-                base = input("Give the full path of the extention directory for the extention: ")
+            elif type == "extention":
+                base = input("Give the full base path of the extention directory for the extention: ")
                 # Check the extention path is valid.
                 if not os.path.exists(base):
                     print("Not a valid PATH")
@@ -267,11 +281,16 @@ def userInput():
 
                 else:
                     path = path.replace(base, "")   # Create a valid extention path.
+            else:
+                print("Please correctly type 'base' or 'extention'.")
+                continue
+
+            # *NOTE : DW if string writes without "" shouldn't break it. 
 
             # Write the new Route to the csv.
             with open('./Routes.csv', mode='a', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow([code, desc, path, type])
+                writer.writerow([code, path, desc, type])
             
             userInput()
             return

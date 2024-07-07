@@ -47,3 +47,6 @@ Future Features:
     - More efficient route searching - Implementing a hash table (with closed addressing) - Allowing extentions to be linearly searched (linked list based of root (base path) node)
     - Protecting code to prevent crashing or errors.
     - Allow user to use full-stops in filename
+
+___DevUse___
+- Create branches - main brach (prod), personal branch (prod with personal changes like startPATH etc), dev branch for testing new stuff

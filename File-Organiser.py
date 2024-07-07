@@ -14,9 +14,6 @@ import time         # Time
 
 # TODO : Automatic Beta Test with real data
 
-# TODO : Fix Recurstion Error that will be caused eventually causing a stack overflow
-
-# TODO : Fix visual Bug
 
 # Original Path to check where for new files
 # Input directory for sorting files
@@ -218,81 +215,78 @@ def stopAutomatic():
 # Get command for user for next step.
 def userInput():
     global auto
-    # Gain the user's command.
-    startupInput = input(inpMsg) 
 
-    if startupInput == "h":   # Output Commands to user to assist with all available commands. 
-        print("""Commands: h = help menu giving available commands
-          a = start automatic processing.
-          s = stops automatic processing.
-          m = begin a manual process (stops automatic).
-          c = create new route/extension.
-          q = quit program.""")
-        userInput()
-        return
-    elif startupInput == "a": # Starts automatic processing.
-        print("Type 's' to stop.")
-        startAutomatic()
-        userInput()
-        return
-    elif startupInput == "m": # Switches to manual processing (and does a manual run).
-        main()
-        if auto.is_alive():
-            stopAutomatic()
-        userInput()
-        return
-    elif startupInput == "s": # Stops the automatic process (without quitting program)
-        if auto.is_alive():
-            print("Stopping Automatic Process...")
-            stopAutomatic()
-            print("Automatic Process has been stopped")
-        else:
-            print("Process is not running")
-        userInput()
-        return
-    elif startupInput == "c": # Creates a new route for the program
-        # Gains necessary input to create a new path.
-        code = input("What is the code for the new route? ")
-        desc = input("Give a short description for the path: ")
-        path = input("What is the full path to the destination directory for the route?")
-        type = input("What is the type of the route (base or extention)? ")
+    while True:
+        # Gain the user's command.
+        startupInput = input(inpMsg) 
 
-        if type == "base":
-            # Check base directory is valid.
-            if os.path.exists(path) == False:
-                print("Not a valid PATH")
-                userInput()
-                return
-        if type == "extention":
-            base = input("Give the full path of the extention directory for the extention: ")
-            # Check the extention path is valid.
-            if os.path.exists(base) == False:
-                print("Not a valid PATH")
-                userInput()                 # If not valid just restart input process.
-                return
+        if startupInput == "h":   # Output Commands to user to assist with all available commands. 
+            print("""Commands: h = help menu giving available commands
+            a = start automatic processing.
+            s = stops automatic processing.
+            m = begin a manual process (stops automatic).
+            c = create new route/extension.
+            q = quit program.""")
+
+        elif startupInput == "a": # Starts automatic processing.
+            print("Type 's' to stop.")
+            startAutomatic()
+
+        elif startupInput == "m": # Switches to manual processing (and does a manual run).
+            main()
+            if auto.is_alive():
+                stopAutomatic()
+
+        elif startupInput == "s": # Stops the automatic process (without quitting program)
+            if auto.is_alive():
+                print("Stopping Automatic Process...")
+                stopAutomatic()
+                print("Automatic Process has been stopped")
             else:
-                path = path.replace(base, "")   # Create a valid extention path.
+                print("Process is not running")
 
-        # Write the new Route to the csv.
-        with open('./Routes.csv', mode='a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([code, desc, path, type])
+        elif startupInput == "c": # Creates a new route for the program
+            # Gains necessary input to create a new path.
+            code = input("What is the code for the new route? ")
+            desc = input("Give a short description for the path: ")
+            path = input("What is the full path to the destination directory for the route?")
+            type = input("What is the type of the route (base or extention)? ")
+
+            if type == "base":
+                # Check base directory is valid.
+                if not os.path.exists(path):
+                    print("Not a valid PATH")
+                    continue
+
+            if type == "extention":
+                base = input("Give the full path of the extention directory for the extention: ")
+                # Check the extention path is valid.
+                if not os.path.exists(base):
+                    print("Not a valid PATH")
+                    continue
+
+                else:
+                    path = path.replace(base, "")   # Create a valid extention path.
+
+            # Write the new Route to the csv.
+            with open('./Routes.csv', mode='a', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow([code, desc, path, type])
+            
+            userInput()
+            return
         
-        userInput()
-        return
-    elif startupInput == "q": # Quit Application
+        elif startupInput == "q": # Quit Application
 
-        # If the automatic process thread is going, then stop it and quit application.
-        if auto.is_alive():
-            stopAutomatic()
-            print("Quitting automatic process.")
-        print("Quitting Application")
-        return
-    else:
-        return
-    
-    # If a process has started give the user the option to give another command (ie stop the processing)
-    userInput()
+            # If the automatic process thread is going, then stop it and quit application.
+            if auto.is_alive():
+                stopAutomatic()
+                print("Quitting automatic process.")
+            print("Quitting Application")
+            return
+        
+        else:
+            continue
 
 # Upon Starting program start by prompting user on what processsing mode they want to use.
 userInput()

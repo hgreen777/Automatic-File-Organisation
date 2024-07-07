@@ -16,10 +16,14 @@ import time         # Time
 
 # TODO : Automatic Running - Test
 
+# TODO : Fix Recurstion Error that will be caused eventually causing a stack overflow
+
+# TODO : Fix visual Bug
+
 # Original Path to check where for new files
 # Input directory for sorting files
 startPATH = r"H:\hjgre\Downloads2\DropSort"
-automaticInterval = 600
+automaticInterval = 6
 
 # Stores all routes in a list of dictionaries. to be searched when creating final destination path for a file.
 routes = []
@@ -176,27 +180,34 @@ def main():
     
     print("Files Processed")
 
+
+
+
 # THREADING to run the process yet allowing the user to dictate when to stop it etc.
 
 # Used to stop automatic processing and allow the program to sync.
-stop_thread = False
+stop_thread = True
 
 # Used to start the process running automatically every interval (original 10mins).
 def automaticRun():
-    global stop_thread      # Ensure edits global scope.
+    global stop_thread, automaticInterval      # Ensure edits global scope.
     # While the process has not been stopped by user (will be running in a seperate thread)
     while not stop_thread:
         main()
         # If the stop_thread is set to True this time will run out and the procedure will exit out after timer.
-        time.sleep(automaticInterval) # Wait 10mins
-
-# Creating a new thread that will run the automatic processing. 
-auto = threading.Thread(target=automaticRun)
+        #automaticInterval = automaticInterval / 100
+        for i in range(100):
+            if not stop_thread:
+                time.sleep(automaticInterval) # Wait 10mins
+            else:
+                break
 
 # Starts the automatic process on a seperate thread.
 def startAutomatic():
     global stop_thread, auto
     stop_thread = False     # Ensure processing does not stop instantly.
+    # Creating a new thread that will run the automatic processing. 
+    auto = threading.Thread(target=automaticRun)
     auto.start()            # Start the processing on the seperate thread.
 
 # Stops the automatic process.
@@ -231,6 +242,7 @@ def userInput():
         return
     elif startupInput == "s": # Stops the automatic process (without quitting program)
         if auto.is_alive():
+            print("Stopping Automatic Process...")
             stopAutomatic()
             print("Automatic Process has been stopped")
         else:

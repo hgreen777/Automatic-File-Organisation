@@ -6,8 +6,6 @@ import csv          # CSV operations
 import threading    # Threading
 import time         # Time
 
-# TODO : (Potential use binary tree to make searching for routes more efficient - cant guarentee balanced - personal use is balanced due to me maintaining?), External extentions file - ~Line: 100
-
 # TODO : Automatic Beta Test with real data - Real Application (with auto launch, and actual data)
 
 

@@ -1,13 +1,12 @@
 # Importign nexessary modules
-import os           # OS (checking directories)
+import os           # OS (checking directories) - directory checking & listing
 import shutil       # File Operation
-import re           # Regex
-import csv          # CSV operations 
-import threading    # Threading
-import time         # Time
+import re           # Regex - FileName Manipulation
+import csv          # CSV operations - Handling persistent route storage
+import threading    # Threading - Allow automatic processing & user input
+import time         # Time - Pausing gap in auto processing.
 
 # TODO : Automatic Beta Test with real data - Real Application (with auto launch, and actual data)
-
 
 # Original Path to check where for new files
 # Input directory for sorting files
@@ -170,11 +169,10 @@ def main():
     print("\r\033[KFiles Processed")
 
 
-# THREADING to run the process yet allowing the user to dictate when to stop it etc.
 
+# THREADING to run the process yet allowing the user to dictate when to stop it etc.
 # Used to stop automatic processing and allow the program to sync.
 stop_thread = True
-
 
 # Used to start the process running automatically every interval (original 10mins).
 def automaticRun():

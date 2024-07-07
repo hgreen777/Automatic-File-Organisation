@@ -8,13 +8,11 @@ import time         # Time
 
 # TODO : (Potential use binary tree to make searching for routes more efficient - cant guarentee balanced - personal use is balanced due to me maintaining?), External extentions file - ~Line: 100
 
-# TODO : Ensure break on line 111 does not break the program (tries to make it more efficient by limiting processing)
-
 # TODO : Creating new locations from CLI input - Test
 
 # TODO : Manually Run Command (from CLI) - Test - test that a user cannot try starting automatic processing twice
 
-# TODO : Automatic Running - Test
+# TODO : Automatic Beta Test with real data
 
 # TODO : Fix Recurstion Error that will be caused eventually causing a stack overflow
 
@@ -24,6 +22,7 @@ import time         # Time
 # Input directory for sorting files
 startPATH = r"H:\hjgre\Downloads2\DropSort"
 automaticInterval = 6
+inpMsg = "Auto-File-Organizer : Command: (h for help): "
 
 # Stores all routes in a list of dictionaries. to be searched when creating final destination path for a file.
 routes = []
@@ -178,15 +177,14 @@ def main():
                 print(f"File name has not been cleaned but may still have been relocated: Error Msg: {e}")
 
     
-    print("Files Processed")
-
-
+    print("\r\033[KFiles Processed")
 
 
 # THREADING to run the process yet allowing the user to dictate when to stop it etc.
 
 # Used to stop automatic processing and allow the program to sync.
 stop_thread = True
+
 
 # Used to start the process running automatically every interval (original 10mins).
 def automaticRun():
@@ -196,12 +194,13 @@ def automaticRun():
         main()
         # If the stop_thread is set to True this time will run out and the procedure will exit out after timer.
         #automaticInterval = automaticInterval / 100
-        for i in range(100):
+        for i in range(1):
             if not stop_thread:
                 time.sleep(automaticInterval) # Wait 10mins
             else:
                 break
 
+auto = threading.Thread(target=automaticRun)
 # Starts the automatic process on a seperate thread.
 def startAutomatic():
     global stop_thread, auto
@@ -218,8 +217,9 @@ def stopAutomatic():
 
 # Get command for user for next step.
 def userInput():
+    global auto
     # Gain the user's command.
-    startupInput = input("Auto-File-Organizer : Command: (h for help): ") 
+    startupInput = input(inpMsg) 
 
     if startupInput == "h":   # Output Commands to user to assist with all available commands. 
         print("""Commands: h = help menu giving available commands
@@ -231,6 +231,7 @@ def userInput():
         userInput()
         return
     elif startupInput == "a": # Starts automatic processing.
+        print("Type 's' to stop.")
         startAutomatic()
         userInput()
         return
@@ -286,6 +287,8 @@ def userInput():
             stopAutomatic()
             print("Quitting automatic process.")
         print("Quitting Application")
+        return
+    else:
         return
     
     # If a process has started give the user the option to give another command (ie stop the processing)

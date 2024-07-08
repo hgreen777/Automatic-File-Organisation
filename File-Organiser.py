@@ -64,8 +64,11 @@ def obtainCodes(fileName):
 
     # Obtain Code - Between the last '_' and the end of the string.
     mask = r"\_[^_]*$"
-    fileName = re.findall(mask, fileName)   
-    fileName = fileName[0] # Select first item in list (findall returns list) - findall Returns list.
+    fileName = re.findall(mask, fileName) 
+    if len(fileName) != 0:  
+        fileName = fileName[0] # Select first item in list (findall returns list) - findall Returns list.
+    else:
+        fileName = "_"      # If no codes found in name just create a string so no codes are returned however code doesn't break.
 
     fileName = fileName[1:] # Remove the _ from the string.
 
@@ -89,6 +92,8 @@ def findDestination(codes, routes, filename):
     # Find if there is a valid base path
     # Check each dictionary in list and see if the code is the same as in the dictionary. (if it is set the destination to destination in the dictionary.)
     for route in routes:
+        if len(codes) == 0:
+            continue
         if route['code'] == codes[0]:
             destination = route['path']
 
@@ -102,7 +107,7 @@ def findDestination(codes, routes, filename):
                     if route['code'] == code:
                         destination += route['path']
                     
-                    break # Limits Processing once code is found 
+                        break # Limits Processing once code is found 
 
             break # To limit processing, if the code is found it shouldn't be repeated in routes so break.
 

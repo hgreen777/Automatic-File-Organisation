@@ -52,5 +52,4 @@ Future Features:
     - General Code improvements, factors & cleaning etc. 
 
 ___DevUse___
-- Create branches - main brach (prod) & dev branch on repo, local version of main branch with cusomisations personal branch (prod with personal changes like startPATH etc), dev branch for testing new stuff
 - Sort AutoLaunch personal version

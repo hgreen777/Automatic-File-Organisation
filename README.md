@@ -50,6 +50,3 @@ Future Features:
     - Protecting code to prevent crashing or errors.
     - Allow user to use full-stops in filename
     - General Code improvements, factors & cleaning etc. 
-
-___DevUse___
-- Sort AutoLaunch personal version

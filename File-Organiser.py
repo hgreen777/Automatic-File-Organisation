@@ -8,7 +8,7 @@ import time         # Time - Pausing gap in auto processing.
 
 
 # To set-up ensure these following variables are correct for use. 
-startPATH = r"H:\hjgre\Downloads2\DropSort"             # Starting directory to check for updates in files.
+startPATH = r"___INSERT DIRECTORY___"             # Starting directory to check for updates in files.
 automaticInterval = 600                                 # Changing this, changes the interval at which automatic processing occures (beware increasing also increases the time it takes for automatic processing to be stopped/quit).
 inpMsg = "Auto-File-Organizer: Command: (h for help): " # Message given to user to interact with system. 
 

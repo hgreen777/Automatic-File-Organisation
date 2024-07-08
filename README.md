@@ -32,6 +32,8 @@ How to use:
         - EG FILENAME_base-extention-extention-rm.txt
         - or FILENAME_base-rm.txt 
         - ^^ both valid options
+        - DO not use '.' in names in current version of program.
+    - Do not change the name of 'Routes.csv'
 
 BEWARE: Program has not been stress tested & is not secure so errors likely to occur if program not used properly. Ensure correct usage.
 

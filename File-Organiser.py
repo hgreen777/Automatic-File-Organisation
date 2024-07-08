@@ -7,11 +7,10 @@ import threading    # Threading - Allow automatic processing & user input
 import time         # Time - Pausing gap in auto processing.
 
 
-# Original Path to check where for new files
-# Input directory for sorting files
-startPATH = r"H:\hjgre\Downloads2\DropSort"
-automaticInterval = 600
-inpMsg = "Auto-File-Organizer : Command: (h for help): "
+# To set-up ensure these following variables are correct for use. 
+startPATH = r"H:\hjgre\Downloads2\DropSort"             # Starting directory to check for updates in files.
+automaticInterval = 600                                 # Changing this, changes the interval at which automatic processing occures (beware increasing also increases the time it takes for automatic processing to be stopped/quit).
+inpMsg = "Auto-File-Organizer: Command: (h for help): " # Message given to user to interact with system. 
 
 # Stores all routes in a list of dictionaries. to be searched when creating final destination path for a file.
 routes = []

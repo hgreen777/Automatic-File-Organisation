@@ -18,7 +18,7 @@ routes = []
 # Create Dictionary of available routes.
 def readCSV():
     # Read all the codes into a dictionary.
-    with open("./Routes.csv", mode='r') as file:
+    with open(r"E:\Programming\Automatic-File-Organisation\Routes.csv", mode='r') as file:
         reader = csv.DictReader(file)
 
         # Add each dictionary to the routes list.

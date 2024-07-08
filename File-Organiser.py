@@ -6,12 +6,11 @@ import csv          # CSV operations - Handling persistent route storage
 import threading    # Threading - Allow automatic processing & user input
 import time         # Time - Pausing gap in auto processing.
 
-# TODO : Automatic Beta Test with real data - Real Application (with auto launch, and actual data)
 
 # Original Path to check where for new files
 # Input directory for sorting files
 startPATH = r"H:\hjgre\Downloads2\DropSort"
-automaticInterval = 6
+automaticInterval = 600
 inpMsg = "Auto-File-Organizer : Command: (h for help): "
 
 # Stores all routes in a list of dictionaries. to be searched when creating final destination path for a file.
@@ -186,8 +185,8 @@ def automaticRun():
     while not stop_thread:
         main()
         # If the stop_thread is set to True this time will run out and the procedure will exit out after timer.
-        #automaticInterval = automaticInterval / 100
-        for i in range(1):
+        automaticInterval = automaticInterval / 100
+        for i in range(100):
             if not stop_thread:
                 time.sleep(automaticInterval) # Wait 10mins
             else:

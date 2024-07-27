@@ -12,9 +12,71 @@ startPATH = r"H:\hjgre\Downloads2\DropSort"             # Starting directory to 
 automaticInterval = 600                                 # Changing this, changes the interval at which automatic processing occures (beware increasing also increases the time it takes for automatic processing to be stopped/quit).
 inpMsg = "Auto-File-Organizer: Command: (h for help): " # Message given to user to interact with system. 
 
-# Stores all routes in a list of dictionaries. to be searched when creating final destination path for a file.
-routes = []
+""" Hash Table Implementation """
+# Simple node class to store nodes in LL DS (apart of a larger hash table).
+class node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
 
+# Stores all routes in a hash table {containing dictionaries in nodes.} This can then be searched when creating final destination path for a file.
+hashmap_size = 100
+routes = [None] * hashmap_size
+
+# Adds the route to the hash table (returns nothing and accepts the route dictionary as argument)
+def addRoute_toHashTable(route_dict):
+    location = hash_function(route_dict['code'])    # Get the cell where the route will be located.
+    route = node(route_dict)                        # Create a node out of the dict
+
+    # Handles locating if it is a base node.
+    if routes[location] == None:
+        routes[location] = route
+    else:
+        # Linearly search the LL to find the end of the list 
+        current = routes[location]
+        while current.next is not None:
+            current = current.next
+        
+        # Set the new node on the end of the LL.
+        current.next = route
+
+    return
+
+# Accepts a code and returns the int location where that route can be stored.
+def hash_function(search_code):
+    # Calculates the location for where a route will be stored. 
+    total = 0 
+    # Iterate over all the letters in the code and add the unicode values togethor
+    for letter in search_code:
+        total += ord(letter)
+    
+    code = total % hashmap_size     # Normalise total to be in bounds of hash table arr.
+    
+    return code
+
+# Accepts a code and returns the path of that route (or Nothing if code is invalid).
+def searchHashTable(search_code):
+    hash = hash_function(search_code)   # Find which cell the route will be stored in.
+
+    current_node = routes[hash]         # Pointer to first node in LL.
+
+    # If the first node is the searched for node, then return the path stored in the node.
+    if current_node.data['code'] == search_code:
+        return current_node.data['path']
+    else:
+    # Search till the end of the LL is found or the searched for node is found.
+        while current_node.next is not None and current_node.data['code'] != search_code:
+            current_node = current_node.next
+        
+        # If the code is not valid (ie end of LL reached, return None).
+        if current_node.data is None:
+            return None
+        else:
+        # Return the path for the searched for node.
+            return current_node.data['path']
+
+
+""" Handling CSV """
 # Create Dictionary of available routes.
 def readCSV():
     # Read all the codes into a dictionary.
@@ -23,8 +85,10 @@ def readCSV():
 
         # Add each dictionary to the routes list.
         for row in reader:
-            routes.append(row)
+            addRoute_toHashTable(row)
 
+
+""" Main Processing of moving files based of codes"""
 # Detects any changes to the given PATH (startPATH) and returns a list of all the changed files to be sorted.
 def detectChange(path):
     allFiles = os.listdir(path) # Gets all files in the path in a list
@@ -82,32 +146,24 @@ def findDestination(codes, routes, filename):
 
     # Base Case - if no valid code, move the file to the overflow area for manual processing. 
     # Provided user hasn't changed routes format, this should be the first dict in route therefore Ω(1) as it is first.
-    for route in routes:
-        if route['code'] == "XX":
-            destination = route['path']
-            break
+    destination = searchHashTable("XX")
 
     # Find if there is a valid base path
-    # Check each dictionary in list and see if the code is the same as in the dictionary. (if it is set the destination to destination in the dictionary.)
-    for route in routes:
-        if len(codes) == 0:
-            continue
-        if route['code'] == codes[0]:
-            destination = route['path']
+    if len(codes) != 0:
+        # Check if the path is a valid code
+        path = searchHashTable(codes[0])
+        if path is not None:
+            # set the destination to the new path.
+            destination = path
 
-            # Check for further extentions - using same process as for base path but if it finds a valid extention, concatenated the path.
-            # Skips the first code (used as a base path, and if the code is 'rm' as not a code path)
-            # TODO : Make more efficient (seperate CSV) - this will ensure it is a valid extension?
-            for index, code in enumerate(codes):
-                if index == 0 or code == "rm":
-                    continue
-                for route in routes:
-                    if route['code'] == code:
-                        destination += route['path']
-                    
-                        break # Limits Processing once code is found 
+        # For the rest of the codes in the names, find the path for the code to create the full path.
+        for index, code in enumerate(codes):
+            if index == 0 or code == "rm":
+                continue
+            path = searchHashTable(code)
 
-            break # To limit processing, if the code is found it shouldn't be repeated in routes so break.
+            if path is not None:
+                destination += path
 
     # If rm is present then the filename needs to be cleaned (ie codes removed)
     if "rm" in codes:
@@ -172,7 +228,7 @@ def main():
     print("\r\033[KFiles Processed")
 
 
-
+""" THREADING """
 # THREADING to run the process yet allowing the user to dictate when to stop it etc.
 # Used to stop automatic processing and allow the program to sync.
 stop_thread = True

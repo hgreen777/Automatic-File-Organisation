@@ -60,6 +60,10 @@ def searchHashTable(search_code):
 
     current_node = routes[hash]         # Pointer to first node in LL.
 
+    # Check if there is a valid route as destination:
+    if current_node is None:
+        return None
+    
     # If the first node is the searched for node, then return the path stored in the node.
     if current_node.data['code'] == search_code:
         return current_node.data['path']
@@ -310,17 +314,13 @@ def userInput():
                 continue
 
             # Check if code is a copy
-            dup = False
             readCSV()
 
-            for route in routes:
-                if route['code'] == code:
-                    print("Duplicate Code")
-                    dup = True
-                    break
-            
-            if dup:
+            # Checks if the code is a duplicate code.
+            if searchHashTable(code) is not None:
+                print("Duplicate Code")
                 continue
+        
 
             if type == "base":
                 # Check base directory is valid.
@@ -328,7 +328,7 @@ def userInput():
                     print("Not a valid PATH")
                     continue
             elif type == "extention":
-                base = input("Give the full base path of the extention directory for the extention: ")
+                base = input("Give the full base path of the base directory for the extention: ")
                 # Check the extention path is valid.
                 if not os.path.exists(base):
                     print("Not a valid PATH")

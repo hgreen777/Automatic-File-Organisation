@@ -45,6 +45,5 @@ Note: System uses threading and batch operation interval: For automatic: 10mins 
 
 Future Features:
 
-    - Protecting code to prevent crashing or errors.
-    - Allow user to use full-stops in filename
+    - Allow user to use full-stops in directory names.
     - General Code improvements, factors & cleaning etc. 

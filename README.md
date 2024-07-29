@@ -45,10 +45,4 @@ Note: System uses threading and batch operation interval: For automatic: 10mins 
 
 Future Features:
 
-    - More efficient route searching - Implementing a hash table (with closed addressing) - Allowing extentions to be linearly searched (linked list based of root (base path) node)
-    - Protecting code to prevent crashing or errors.
-    - Allow user to use full-stops in filename
-    - General Code improvements, factors & cleaning etc. 
-
-___DevUse___
-- Sort AutoLaunch personal version
+    - Proper testing:) 

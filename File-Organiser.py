@@ -12,19 +12,93 @@ startPATH = r"___INSERT DIRECTORY___"             # Starting directory to check 
 automaticInterval = 600                                 # Changing this, changes the interval at which automatic processing occures (beware increasing also increases the time it takes for automatic processing to be stopped/quit).
 inpMsg = "Auto-File-Organizer: Command: (h for help): " # Message given to user to interact with system. 
 
-# Stores all routes in a list of dictionaries. to be searched when creating final destination path for a file.
-routes = []
+""" Hash Table Implementation """
+# Simple node class to store nodes in LL DS (apart of a larger hash table).
+class node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
 
+# Stores all routes in a hash table {containing dictionaries in nodes.} This can then be searched when creating final destination path for a file.
+hashmap_size = 100
+routes = [None] * hashmap_size
+
+# Adds the route to the hash table (returns nothing and accepts the route dictionary as argument)
+def addRoute_toHashTable(route_dict):
+    location = hash_function(route_dict['code'])    # Get the cell where the route will be located.
+    route = node(route_dict)                        # Create a node out of the dict
+
+    # Handles locating if it is a base node.
+    if routes[location] == None:
+        routes[location] = route
+    else:
+        # Linearly search the LL to find the end of the list 
+        current = routes[location]
+        while current.next is not None:
+            current = current.next
+        
+        # Set the new node on the end of the LL.
+        current.next = route
+
+    return
+
+# Accepts a code and returns the int location where that route can be stored.
+def hash_function(search_code):
+    # Calculates the location for where a route will be stored. 
+    total = 0 
+    # Iterate over all the letters in the code and add the unicode values togethor
+    for letter in search_code:
+        total += ord(letter)
+    
+    code = total % hashmap_size     # Normalise total to be in bounds of hash table arr.
+    
+    return code
+
+# Accepts a code and returns the path of that route (or Nothing if code is invalid).
+def searchHashTable(search_code):
+    hash = hash_function(search_code)   # Find which cell the route will be stored in.
+
+    current_node = routes[hash]         # Pointer to first node in LL.
+
+    # Check if there is a valid route as destination:
+    if current_node is None:
+        return None
+    
+    # If the first node is the searched for node, then return the path stored in the node.
+    if current_node.data['code'] == search_code:
+        return current_node.data['path']
+    else:
+    # Search till the end of the LL is found or the searched for node is found.
+        while current_node.next is not None and current_node.data['code'] != search_code:
+            current_node = current_node.next
+        
+        # If the code is not valid (ie end of LL reached, return None).
+        if current_node.data is None:
+            return None
+        else:
+        # Return the path for the searched for node.
+            return current_node.data['path']
+
+
+""" Handling CSV """
 # Create Dictionary of available routes.
 def readCSV():
     # Read all the codes into a dictionary.
-    with open("./Routes.csv", mode='r') as file:
-        reader = csv.DictReader(file)
+    try:
+        with open(r"E:\Programming\Automatic-File-Organisation\Routes.csv", mode='r') as file:
+            reader = csv.DictReader(file)
 
-        # Add each dictionary to the routes list.
-        for row in reader:
-            routes.append(row)
+            # Add each dictionary to the routes list.
+            for row in reader:
+                addRoute_toHashTable(row)
 
+        return True
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
+
+
+""" Main Processing of moving files based of codes"""
 # Detects any changes to the given PATH (startPATH) and returns a list of all the changed files to be sorted.
 def detectChange(path):
     allFiles = os.listdir(path) # Gets all files in the path in a list
@@ -44,20 +118,40 @@ def moveFile(file, newPath):
     newPath = newPath + "/" + file
 
     # Using module to handle physical file move.
-    shutil.move(oldPath, newPath)
-    
-    # Return (*to be implemented when securing the program)
-    return 
+    try:
+        shutil.move(oldPath, newPath)
+    except:
+        try:
+            newPath = searchHashTable("XX") + "/" + file
+            shutil.move(oldPath, newPath)
+        except:
+            return False
+ 
+    return True
+
+# Checks if a fileName is a directory or not
+def is_directory(fileName, path):
+    # Check if the fileName is a directory or file 
+    fullPath = os.path.join(path, fileName)
+    if os.path.isdir(fullPath):
+        # File is a directory
+        return True
+    else:
+        return False
 
 # Route the file to correct destination - finds all the codes then finds the path based of the codes.
 # Obtains code abreviations from filename.
-def obtainCodes(fileName):
-    # Remove FileType - mask finds the final full stop and looks ahead to the end of the string.
-    mask = r"^(.*)(?=\.[^.]*$)"
-    regex_name = re.findall(mask, fileName)
-    # If it is a directory will not have a file type so nothing will be picked up in mask. Therefore no change.
-    if len(regex_name) != 0:
-        fileName = regex_name[0]
+def obtainCodes(fileName, path): 
+
+    if not is_directory(fileName, path):
+        # Remove FileType - mask finds the final full stop and looks ahead to the end of the string.
+        mask = r"^(.*)(?=\.[^.]*$)"
+        regex_name = re.findall(mask, fileName)
+        #
+        # vv Should always run due to overarching is_directory check. 
+        # If it is a directory will not have a file type so nothing will be picked up in mask. Therefore no change.
+        if len(regex_name) != 0:
+            fileName = regex_name[0]
 
 
     # Obtain Code - Between the last '_' and the end of the string.
@@ -77,50 +171,47 @@ def obtainCodes(fileName):
     return codes    # Returns list generated by findall
 
 # Processes the codes - finds destination PATH & checks if filename needs cleaning.
-def findDestination(codes, routes, filename):
+def findDestination(codes, filename, filepath):
     # Loop over codes and check if valid code and find path
 
     # Base Case - if no valid code, move the file to the overflow area for manual processing. 
     # Provided user hasn't changed routes format, this should be the first dict in route therefore Ω(1) as it is first.
-    for route in routes:
-        if route['code'] == "XX":
-            destination = route['path']
-            break
+    destination = searchHashTable("XX")
 
     # Find if there is a valid base path
-    # Check each dictionary in list and see if the code is the same as in the dictionary. (if it is set the destination to destination in the dictionary.)
-    for route in routes:
-        if len(codes) == 0:
-            continue
-        if route['code'] == codes[0]:
-            destination = route['path']
+    if len(codes) != 0:
+        # Check if the path is a valid code
+        path = searchHashTable(codes[0])
+        if path is not None:
+            # set the destination to the new path.
+            destination = path
 
-            # Check for further extentions - using same process as for base path but if it finds a valid extention, concatenated the path.
-            # Skips the first code (used as a base path, and if the code is 'rm' as not a code path)
-            # TODO : Make more efficient (seperate CSV) - this will ensure it is a valid extension?
-            for index, code in enumerate(codes):
-                if index == 0 or code == "rm":
-                    continue
-                for route in routes:
-                    if route['code'] == code:
-                        destination += route['path']
-                    
-                        break # Limits Processing once code is found 
+        # For the rest of the codes in the names, find the path for the code to create the full path.
+        for index, code in enumerate(codes):
+            if index == 0 or code == "rm":
+                continue
+            path = searchHashTable(code)
 
-            break # To limit processing, if the code is found it shouldn't be repeated in routes so break.
+            if path is not None:
+                destination += path
 
     # If rm is present then the filename needs to be cleaned (ie codes removed)
     if "rm" in codes:
-        filename = cleanName(filename)
+        filename = cleanName(filename, filepath)
         return destination, filename, True
     
     # Returns: destination PATH, filename the file should be saved as & if cleanName has been used
     return destination,filename, False
 
 # Cleans File Name.
-def cleanName(fileName):
-    # Locates the codes between final '_' and the file type 
-    mask = r"(_[^_]+)(?=\.[^.]*$)"
+def cleanName(fileName, path):
+
+    if not is_directory(fileName, path):
+        # Locates the codes between final '_' and the file type 
+        mask = r"(_[^_]+)(?=\.[^.]*$)"
+    else:
+        # Locates the codes between final '_' and end of file name
+        mask = r"\_[^_]*$" 
 
     match = re.search(mask, fileName)
 
@@ -129,37 +220,29 @@ def cleanName(fileName):
         fileName = fileName.replace(match[0], "")
         return fileName
     
-    # For handling directorys
-    # Ensure it is not a file by checking for a filetype (breaks if full-stop in name)
-    mask = r"^(.*)(?=\.[^.]*$)"
-    regex_name = re.findall(mask, fileName)
-    # If it is a directory will not have a file type so nothing will be picked up in mask.
-    if len(regex_name) == 0:
-        # Code will be at end after last '_' to the end of the file so remove it
-        mask = r"(_[^_]+)$"
-        reg = re.findall(mask, fileName)
-        fileName = fileName.replace(reg[0], "")
-        return fileName
-    
     # If provblem occured and nothing is changed than just return the original filename. 
     return fileName
 
 # Runs the full process of finding files to sort, sorting them & renaming them.
 def main():
     # Make sure using most-up-to-date routes (ie re-read)
-    readCSV()
+    if not readCSV():
+        print("Error with Routes File. Stopping Processing")
+        return 
 
     # Find a list of files that need to be sorted
     files = detectChange(startPATH)
 
     # Iterate over each file, locate the codes and subsequent destination 
     for file in files:
-        codes = obtainCodes(file)
-        returns = findDestination(codes, routes, file)
+        codes = obtainCodes(file, startPATH)
+        returns = findDestination(codes, file, startPATH)
         destination = returns[0]; filename = returns[1]; isNameChange = returns[2]
 
         # Move file to new location
-        moveFile(file,destination)
+        if not moveFile(file,destination):
+            print("Error Processing a file.")
+            isNameChange = False    # To prevent further errors.
 
         # Change the name if necessary
         if isNameChange:
@@ -172,7 +255,7 @@ def main():
     print("\r\033[KFiles Processed")
 
 
-
+""" THREADING """
 # THREADING to run the process yet allowing the user to dictate when to stop it etc.
 # Used to stop automatic processing and allow the program to sync.
 stop_thread = True
@@ -254,17 +337,13 @@ def userInput():
                 continue
 
             # Check if code is a copy
-            dup = False
             readCSV()
 
-            for route in routes:
-                if route['code'] == code:
-                    print("Duplicate Code")
-                    dup = True
-                    break
-            
-            if dup:
+            # Checks if the code is a duplicate code.
+            if searchHashTable(code) is not None:
+                print("Duplicate Code")
                 continue
+        
 
             if type == "base":
                 # Check base directory is valid.
@@ -272,7 +351,7 @@ def userInput():
                     print("Not a valid PATH")
                     continue
             elif type == "extention":
-                base = input("Give the full base path of the extention directory for the extention: ")
+                base = input("Give the full base path of the base directory for the extention: ")
                 # Check the extention path is valid.
                 if not os.path.exists(base):
                     print("Not a valid PATH")

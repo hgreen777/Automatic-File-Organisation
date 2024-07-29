@@ -1,3 +1,13 @@
 code,path,desc,type
 XX,"H:\hjgre\Downloads2\DropSort\Overflow",// Overflow - (first for processing),base
-rm,"",// Clean name (is a code but not route - DONT REMOVE),base
+SC,"H:\hjgre\School",// School,base
+Phy,"\A-Level\Physics",//Physics,extention
+CS,"\A-Level\CS",//CS,extention
+CD,"E:\Programming",// Code,base
+WK,"E:\WorkDocs",// Work,base
+GM,"H:\hjgre\Downloads2\DropSort\Games",// Games,base
+PO,"H:\hjgre\Pictures",// Life/Photos,base
+IM,"H:\hjgre\Documents\ImportantDocs",// Important Info need to remember (ie recovery codes etc),base
+rm,"",// Clean name (jus here so shows in graphic - is a code but not route),base
+ts,H:\hjgre\Downloads2,s,base
+Chem,\Secondary\Chemistry,// Chemistry,extention

@@ -84,12 +84,18 @@ def searchHashTable(search_code):
 # Create Dictionary of available routes.
 def readCSV():
     # Read all the codes into a dictionary.
-    with open(r"E:\Programming\Automatic-File-Organisation\Routes.csv", mode='r') as file:
-        reader = csv.DictReader(file)
+    try:
+        with open(r"E:\Programming\Automatic-File-Organisation\Routes.csv", mode='r') as file:
+            reader = csv.DictReader(file)
 
-        # Add each dictionary to the routes list.
-        for row in reader:
-            addRoute_toHashTable(row)
+            # Add each dictionary to the routes list.
+            for row in reader:
+                addRoute_toHashTable(row)
+
+        return True
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
 
 
 """ Main Processing of moving files based of codes"""
@@ -119,9 +125,9 @@ def moveFile(file, newPath):
             newPath = searchHashTable("XX") + "/" + file
             shutil.move(oldPath, newPath)
         except:
-            return
-    # Return (*to be implemented when securing the program)
-    return 
+            return False
+ 
+    return True
 
 # Checks if a fileName is a directory or not
 def is_directory(fileName, path):
@@ -220,7 +226,9 @@ def cleanName(fileName, path):
 # Runs the full process of finding files to sort, sorting them & renaming them.
 def main():
     # Make sure using most-up-to-date routes (ie re-read)
-    readCSV()
+    if not readCSV():
+        print("Error with Routes File. Stopping Processing")
+        return 
 
     # Find a list of files that need to be sorted
     files = detectChange(startPATH)
@@ -232,7 +240,9 @@ def main():
         destination = returns[0]; filename = returns[1]; isNameChange = returns[2]
 
         # Move file to new location
-        moveFile(file,destination)
+        if not moveFile(file,destination):
+            print("Error Processing a file.")
+            isNameChange = False    # To prevent further errors.
 
         # Change the name if necessary
         if isNameChange:
@@ -377,4 +387,3 @@ def userInput():
 
 # Upon Starting program start by prompting user on what processsing mode they want to use.
 userInput()
-

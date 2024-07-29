@@ -45,5 +45,4 @@ Note: System uses threading and batch operation interval: For automatic: 10mins 
 
 Future Features:
 
-    - General Code improvements, factors & cleaning etc.
     - Proper testing:) 

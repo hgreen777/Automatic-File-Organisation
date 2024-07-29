@@ -45,6 +45,5 @@ Note: System uses threading and batch operation interval: For automatic: 10mins 
 
 Future Features:
 
-    - Allow user to use full-stops in directory names.
-    - Test the try-except implementation
-    - General Code improvements, factors & cleaning etc. 
+    - General Code improvements, factors & cleaning etc.
+    - Proper testing:) 

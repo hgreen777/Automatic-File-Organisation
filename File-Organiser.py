@@ -125,13 +125,23 @@ def moveFile(file, newPath):
 
 # Route the file to correct destination - finds all the codes then finds the path based of the codes.
 # Obtains code abreviations from filename.
-def obtainCodes(fileName):
-    # Remove FileType - mask finds the final full stop and looks ahead to the end of the string.
-    mask = r"^(.*)(?=\.[^.]*$)"
-    regex_name = re.findall(mask, fileName)
-    # If it is a directory will not have a file type so nothing will be picked up in mask. Therefore no change.
-    if len(regex_name) != 0:
-        fileName = regex_name[0]
+def obtainCodes(fileName, path):
+    # Check if the fileName is a directory or file 
+    fullPath = os.path.join(path, fileName)
+    is_directory = False
+    if os.path.isdir(fullPath):
+        # File is a directory
+        is_directory = True
+
+    if not is_directory:
+        # Remove FileType - mask finds the final full stop and looks ahead to the end of the string.
+        mask = r"^(.*)(?=\.[^.]*$)"
+        regex_name = re.findall(mask, fileName)
+        #
+        # vv Should always run due to overarching is_directory check. 
+        # If it is a directory will not have a file type so nothing will be picked up in mask. Therefore no change.
+        if len(regex_name) != 0:
+            fileName = regex_name[0]
 
 
     # Obtain Code - Between the last '_' and the end of the string.
@@ -220,7 +230,7 @@ def main():
 
     # Iterate over each file, locate the codes and subsequent destination 
     for file in files:
-        codes = obtainCodes(file)
+        codes = obtainCodes(file, startPATH)
         returns = findDestination(codes, file)
         destination = returns[0]; filename = returns[1]; isNameChange = returns[2]
 
@@ -370,3 +380,5 @@ def userInput():
 
 # Upon Starting program start by prompting user on what processsing mode they want to use.
 userInput()
+#files = detectChange(startPATH)
+#obtainCodes(files[0],startPATH)
